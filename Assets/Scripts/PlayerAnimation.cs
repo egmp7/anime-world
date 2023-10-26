@@ -13,14 +13,14 @@ public class PlayerAnimation : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       if (Input.GetButtonDown("Jump"))
-        {
-            animator.SetBool("isMoving", true);
-        }
-        if (Input.GetButtonUp("Jump"))
-        {
-            animator.SetBool("isMoving", false);
-        }
+    //    if (Input.GetButtonDown("Jump"))
+    //     {
+    //         animator.SetBool("isMoving", true);
+    //     }
+    //     if (Input.GetButtonUp("Jump"))
+    //     {
+    //         animator.SetBool("isMoving", false);
+    //     }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
