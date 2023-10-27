@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     [Header("Player")]
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
+    [Tooltip("How fast the character turns to face movement direction")]
+    [Range(0.0f, 0.3f)]
+    public float RotationSmoothTime = 0.12f;
 
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -19,6 +22,10 @@ public class PlayerController : MonoBehaviour
     [Tooltip("How far in degrees can you move the camera down")]
     [SerializeField] float BottomClamp = -30.0f;
 
+    // player
+    private float _targetRotation;
+    private float _rotationVelocity;
+
     // animation IDs
     private int _animIDIsMoving;
 
@@ -27,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private float _cinemachineTargetPitch;
 
     private Animator _animator;
+    private Camera _mainCamera;
     #if ENABLE_INPUT_SYSTEM
     private Input _input;
     #endif
@@ -35,6 +43,7 @@ public class PlayerController : MonoBehaviour
     {
         _input = GetComponent<Input>();
         _animator = GetComponent<Animator>();
+        _mainCamera = Camera.main;
         AssignAnimationIDs();
     }
 
@@ -55,22 +64,23 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        // Inputs
-        float forward = _input.move.y;
-        float side = _input.move.x;
 
-        Vector3 playerForward = transform.forward;
-        Vector3 playerRight = transform.right;
-        playerForward.y = 0;
-        playerRight.y = 0;
+        // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+        // if there is a move input rotate player when the player is moving
+        if (_input.move != Vector2.zero)
+        {
+            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            
+            _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +_mainCamera.transform.eulerAngles.y;
+            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,RotationSmoothTime);
 
-        // Relative Positions
-        Vector3 forwardRelative = playerForward * forward;
-        Vector3 rightRelative = playerRight * side;
+            // rotate to face input direction relative to camera position
+            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 
-        // Movement
-        Vector3 playerMovement = forwardRelative + rightRelative;
-        transform.position += playerMovement * MoveSpeed * Time.deltaTime;
+            // move the player
+            Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+            transform.position += targetDirection.normalized * (MoveSpeed * Time.deltaTime);
+        }
 
         // animation
         if (_input.move == Vector2.zero) _animator.SetBool(_animIDIsMoving, false);
