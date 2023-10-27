@@ -523,6 +523,7 @@ GameObject:
   - component: {fileID: 927739377788126459}
   - component: {fileID: 7730800811269407760}
   - component: {fileID: 1362443648341759929}
+  - component: {fileID: 1696971154059945179}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -658,6 +659,22 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.93, z: 0}
+--- !u!114 &1696971154059945179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3012326127071515945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50d279456e58c485dbb116c4dd78b0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skinnedMeshRenderer: {fileID: 8415290923212998412}
+  BlinkLength: 0.1
+  BlinkInterval: 3
+  SmoothBlink: 0.975
 --- !u!1 &3082569096565414123
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,7 +1877,42 @@ SkinnedMeshRenderer:
   - {fileID: 4409464139385388989}
   - {fileID: 655265422834770086}
   - {fileID: 551635997014457857}
-  m_BlendShapeWeights: []
+  m_BlendShapeWeights:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   m_RootBone: {fileID: 5708175819268330552}
   m_AABB:
     m_Center: {x: -0.0000012353994, y: -0.0019323565, z: -0.00047447107}
