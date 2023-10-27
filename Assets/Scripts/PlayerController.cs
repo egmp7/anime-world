@@ -9,36 +9,51 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
 
+    [Header("Cinemachine")]
+    [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
+    [SerializeField] GameObject CinemachineCameraTarget;
+
+    [Tooltip("How far in degrees can you move the camera up")]
+    [SerializeField] float TopClamp = 70.0f;
+
+    [Tooltip("How far in degrees can you move the camera down")]
+    [SerializeField] float BottomClamp = -30.0f;
+
     // animation IDs
     private int _animIDIsMoving;
 
-    private CharacterController _controller;
+    // cinemachine
+    private float _cinemachineTargetYaw;
+    private float _cinemachineTargetPitch;
+
     private Animator _animator;
-    #if ENABLE_INPUT_SYSTEM 
+    #if ENABLE_INPUT_SYSTEM
     private Input _input;
     #endif
 
-    void Start()
+    private void Start()
     {
         _input = GetComponent<Input>();
-        _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
-
         AssignAnimationIDs();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         Move();
     }
 
-    private void AssignAnimationIDs()
-        {
-            _animIDIsMoving = Animator.StringToHash("isMoving");
-        }
+    private void LateUpdate()
+    {
+        CameraRotation();
+    }
 
-    void Move()
+    private void AssignAnimationIDs()
+    {
+        _animIDIsMoving = Animator.StringToHash("isMoving");
+    }
+
+    private void Move()
     {
         // Inputs
         float forward = _input.move.y;
@@ -58,8 +73,29 @@ public class PlayerController : MonoBehaviour
         transform.position += playerMovement * MoveSpeed * Time.deltaTime;
 
         // animation
-        if (_input.move == Vector2.zero) _animator.SetBool(_animIDIsMoving,false);
-        else _animator.SetBool(_animIDIsMoving,true);
+        if (_input.move == Vector2.zero) _animator.SetBool(_animIDIsMoving, false);
+        else _animator.SetBool(_animIDIsMoving, true);
 
+    }
+
+    private void CameraRotation()
+    {
+        // get input values
+        _cinemachineTargetYaw += _input.look.x;
+        _cinemachineTargetPitch += _input.look.y;
+
+        // clamp our rotations so our values are limited 360 degrees
+        _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+        _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+
+        // Cinemachine will follow this target
+        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch,_cinemachineTargetYaw, 0.0f);
+    }
+
+    private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+    {
+        if (lfAngle < -360f) lfAngle += 360f;
+        if (lfAngle > 360f) lfAngle -= 360f;
+        return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 }
