@@ -1,7 +1,4 @@
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM 
-using UnityEngine.InputSystem;
-#endif
 
 public class PlayerController : MonoBehaviour
 {
@@ -35,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     private Animator _animator;
     private Camera _mainCamera;
+    private CharacterController _controller;
     #if ENABLE_INPUT_SYSTEM
     private Input _input;
     #endif
@@ -43,6 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         _input = GetComponent<Input>();
         _animator = GetComponent<Animator>();
+        _controller = GetComponent<CharacterController>();
         _mainCamera = Camera.main;
         AssignAnimationIDs();
     }
@@ -70,7 +69,7 @@ public class PlayerController : MonoBehaviour
         if (_input.move != Vector2.zero)
         {
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-            
+
             _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +_mainCamera.transform.eulerAngles.y;
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,RotationSmoothTime);
 
@@ -79,7 +78,7 @@ public class PlayerController : MonoBehaviour
 
             // move the player
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-            transform.position += targetDirection.normalized * (MoveSpeed * Time.deltaTime);
+            _controller.Move(targetDirection.normalized * (MoveSpeed * Time.deltaTime));
         }
 
         // animation
