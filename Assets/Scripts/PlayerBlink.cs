@@ -25,7 +25,6 @@ public class PlayerBlink : MonoBehaviour
         blinkBlendShapeIndex = skinnedMeshRenderer.sharedMesh.GetBlendShapeIndex("blink");
     }
 
-
     void Update()
     {
         if (Time.time > timeToNextBlink)
