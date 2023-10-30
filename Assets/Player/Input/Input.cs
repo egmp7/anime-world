@@ -9,6 +9,7 @@ public class Input : MonoBehaviour
     public Vector2 move;
     public Vector2 look;
     public bool closeCamera;
+    public bool ambientCamera;
     //////////////////////////////////////////////////
     #if ENABLE_INPUT_SYSTEM
     public void OnMove(InputValue value)
@@ -23,6 +24,10 @@ public class Input : MonoBehaviour
     {
         CloseCameraInput(value.isPressed);
     }
+    public void OnAmbientCamera(InputValue value)
+    {
+        AmbientCameraInput(value.isPressed);
+    }
     #endif
     ///////////////////////////////////////////////////
     public void MoveInput(Vector2 newMoveDirection)
@@ -36,5 +41,9 @@ public class Input : MonoBehaviour
     public void CloseCameraInput(bool newCameraCloseState)
     {
         closeCamera = newCameraCloseState;
+    }
+    public void AmbientCameraInput(bool newCameraAmbientState)
+    {
+        ambientCamera = newCameraAmbientState;
     }
 }
