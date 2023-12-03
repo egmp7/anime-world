@@ -180,7 +180,7 @@
                     "id": "4342c37c-2eb5-4717-9eea-d22a67138488",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "InvertVector2(invertX=false),ScaleVector2(x=10,y=10)",
+                    "processors": "InvertVector2(invertX=false),ScaleVector2(x=0.5,y=0.5)",
                     "groups": "",
                     "action": "Look",
                     "isComposite": false,

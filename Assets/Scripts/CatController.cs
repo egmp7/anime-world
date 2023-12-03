@@ -32,19 +32,23 @@ public class CatController : MonoBehaviour
 
     private void Update()
     {
-        
-        // distance between player and cat
-        Vector3 catPos = new Vector3(transform.position.x,0,transform.position.z);
-        Vector3 playerPos = new Vector3(playerTransform.position.x,0,playerTransform.position.z);
-        float distance = Vector3.Distance(catPos,playerPos);
+        FollowPlayer();
+    }
 
-        if (distance > maxDistance) 
+    private void FollowPlayer()
+    {
+        // distance between player and cat
+        Vector3 catPos = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 playerPos = new Vector3(playerTransform.position.x, 0, playerTransform.position.z);
+        float distance = Vector3.Distance(catPos, playerPos);
+
+        if (distance > maxDistance)
         {
             // look at player
             Vector3 direction = playerPos - catPos;
             Quaternion toRotation = Quaternion.LookRotation(direction, transform.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, RotationSpeed * Time.deltaTime);
-            
+
             // move
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
 
@@ -52,6 +56,5 @@ public class CatController : MonoBehaviour
             _animator.SetBool(_animIDIsFollowing, true);
         }
         else _animator.SetBool(_animIDIsFollowing, false);
-        
     }
 }

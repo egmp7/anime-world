@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Move();
+        Animate();
     }
 
     private void LateUpdate()
@@ -80,11 +81,13 @@ public class PlayerController : MonoBehaviour
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
             _controller.Move(targetDirection.normalized * (MoveSpeed * Time.deltaTime));
         }
+    }
 
+    private void Animate()
+    {
         // animation
         if (_input.move == Vector2.zero) _animator.SetBool(_animIDIsMoving, false);
         else _animator.SetBool(_animIDIsMoving, true);
-
     }
 
     private void CameraRotation()
